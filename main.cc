@@ -2,35 +2,94 @@
 #include <iostream>
 #include <stdio.h>
 
-class Operetion{
+class Exprexion {
+public:
+	virtual int evaluete(void) = 0;
+}; 
+class Literal :public Exprexion{
+	private:
+		int value;
 	public: 
-		virtual int operate( int a, int b) = 0;
-		
+		Literal(int value){
+
+			this->value = value;
+		}
+		int evaluete(void){
+
+			return value;
+		}
 };
-class Addition : public Operetion{
+class Addition : public Exprexion{
+	private:
+		Exprexion* a;
+		Exprexion* b;
 	public:
-	int operate(int a, int b){
-		return a + b;
-	}	
+		Addition(Exprexion& a, Exprexion& b){
+			this-> a = &a;
+			this-> b = &b;
+		}
+		int evaluete(void){
+			return a->evaluete() + b->evaluete();
+		}	
 };
-
-
-class Difference : public Operetion{
+class Difference : public Exprexion{
+	private:
+		Exprexion* a;
+		Exprexion* b;
 	public:
-	int operate(int a, int b){
-		return a - b;
-	}	
+		Difference(Exprexion& a, Exprexion& b){
+			this-> a = &a;
+			this-> b = &b;
+		}
+		int evaluete(void){
+			return a->evaluete() - b->evaluete();
+		}	
+};
+class Multiplication : public Exprexion{
+	private:
+		Exprexion* a;
+		Exprexion* b;
+	public:
+		Multiplication(Exprexion& a, Exprexion& b){
+			this-> a = &a;
+			this-> b = &b;
+		}
+		int evaluete(void){
+			return a->evaluete() * b->evaluete();
+		}	
 };
 
-void printfOperation(int a, int b, Operetion& op){
-	std::cout<< a <<" ? "<< b << " = "<< op.operate(a,b) << std::endl;
+class Division : public Exprexion{
+	private:
+		Exprexion* a;
+		Exprexion* b;
+	public:
+		Division(Exprexion& a, Exprexion& b){
+			this-> a = &a;
+			this-> b = &b;
+		}
+		int evaluete(void){
+			return a->evaluete() / b->evaluete();
+		}	
+};
 
+void printfExprexion(Exprexion& exp){
+	std::cout<< "evulute  = " << exp.evaluete() << std::endl;
 }
-
 int main(){
-	Addition add;
-	Difference diff;
-	printfOperation(2,3,add);
-	printfOperation(2,3,diff);
+	Literal num1(1);
+	Literal num2(2);
+	Literal num3(3);
+	Literal num4(4);
+	Literal num5(5);
+	
+	
+	Multiplication mult(num3,num5);
+	Division divi(num4,num2);
+	Addition add(mult,divi);
+	Difference diff(add,num1);
+
+	printfExprexion(diff);
+	
 	return 0;
 };
